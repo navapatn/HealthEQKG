@@ -1,0 +1,20 @@
+fac
+http://healtheqkg.example.org/resource/facility/85259
+http://healtheqkg.example.org/resource/facility/55905
+http://healtheqkg.example.org/resource/facility/98195
+http://healtheqkg.example.org/resource/facility/98506
+http://healtheqkg.example.org/resource/facility/20010
+http://healtheqkg.example.org/resource/facility/32224
+http://healtheqkg.example.org/resource/facility/60612
+http://healtheqkg.example.org/resource/facility/45504
+
+
+
+<http://healtheqkg.example.org/resource/facility/85259>
+    <http://healtheqkg.example.org/resource/facility/55905>
+    <http://healtheqkg.example.org/resource/facility/98195>
+    <http://healtheqkg.example.org/resource/facility/98506>
+    <http://healtheqkg.example.org/resource/facility/20010>
+    <http://healtheqkg.example.org/resource/facility/32224>
+    <http://healtheqkg.example.org/resource/facility/60612>
+    <http://healtheqkg.example.org/resource/facility/45504>

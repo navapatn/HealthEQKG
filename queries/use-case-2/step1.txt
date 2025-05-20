@@ -1,0 +1,20 @@
+PREFIX he:     <http://healtheqkg.example.org/ontology#>
+PREFIX schema: <http://schema.org/>
+PREFIX xsd:    <http://www.w3.org/2001/XMLSchema#>
+
+SELECT DISTINCT ?fac
+               ( IF(?score >= 80, "HighADI", "LowADI") AS ?ADIGroup )
+WHERE {
+  # Facility → address → zip string
+  ?fac a he:Facility ;
+       schema:address    ?addr .
+  ?addr schema:postalCode ?zipStr .
+
+  # ZipCodeArea → ADI
+  ?zipArea a he:ZipCodeArea ;
+           he:zipCodeValue   ?zipStr ;
+           he:hasADISummary  ?adi .
+  ?adi he:nationalScore    ?score ;
+       he:referenceYear   "2020"^^xsd:gYear .
+}
+ORDER BY ?ADIGroup ?fac

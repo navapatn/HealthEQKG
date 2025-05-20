@@ -1,0 +1,47 @@
+PREFIX he:      <http://healtheqkg.example.org/ontology#>
+PREFIX schema:  <http://schema.org/>
+
+SELECT DISTINCT ?p       AS ?Physician
+                ?npi     AS ?NPI
+                ?given   AS ?FirstName
+                ?family  AS ?LastName
+                ?school  AS ?MedSchool
+WHERE {
+  # Define your top‐tier schools by label
+  VALUES ?school {
+    "Harvard Medical School"
+    "Johns Hopkins University School of Medicine"
+    "University of California San Francisco School of Medicine"
+    # …add more as needed…
+  }
+
+  # Match MedicalSchool nodes
+  ?ms a he:MedicalSchool ;
+      rdfs:label ?school .
+
+  # Physicians who attended one of those schools
+  ?p  a schema:Physician ;
+      schema:usNPI           ?npi ;
+      schema:givenName      ?given ;
+      schema:familyName     ?family ;
+      he:attendedMedSchool  ?ms .
+
+  # 2020 placements at HighADI facilities
+  ?jp a he:JobPlacement ;
+      he:hasParticipant   ?p ;
+      he:worksAt          ?fac ;
+      he:hasTimeReference ?yr .
+  FILTER(STRAFTER(STR(?yr), "/year/") = "2020")
+
+  # Facility must be in HighADI
+  ?fac schema:address    ?addr .
+  ?addr schema:postalCode ?zipStr .
+
+  ?zipArea a he:ZipCodeArea ;
+           he:zipCodeValue   ?zipStr ;
+           he:hasADISummary  ?adi .
+  ?adi he:nationalScore    ?score ;
+       he:referenceYear   "2020"^^xsd:gYear .
+  FILTER(?score >= 80)
+}
+ORDER BY ?family ?given

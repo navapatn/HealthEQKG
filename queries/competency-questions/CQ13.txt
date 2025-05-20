@@ -1,0 +1,25 @@
+PREFIX he:     <http://healtheqkg.example.org/ontology#>
+PREFIX schema: <http://schema.org/>
+
+SELECT ?quintile (COUNT(DISTINCT ?p) AS ?physCount)
+WHERE {
+  ?p a schema:Physician .
+
+  ?jp a he:JobPlacement ;
+      he:hasParticipant ?p ;
+      he:worksAt       ?fac .
+
+  ?fac schema:address     ?addr .
+  ?addr schema:postalCode ?zipStr .
+
+  ?zipRes he:zipCodeValue  ?zipStr ;
+          he:hasADISummary  ?adi .
+
+  ?adi he:nationalScore    ?score .
+  FILTER(datatype(?score)=xsd:integer)
+
+  # quintiles: 1–5 over 0–100
+  BIND(CEIL((?score / 20.0)) AS ?quintile)
+}
+GROUP BY ?quintile
+ORDER BY ?quintile

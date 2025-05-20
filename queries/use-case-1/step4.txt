@@ -1,0 +1,9 @@
+PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+
+SELECT
+  ( xsd:decimal(?N_ge80) / xsd:decimal(?N_total) AS ?P )
+WHERE {
+  # replace 12 and 157 with your actual counts from Steps 1 & 3
+  BIND(12  AS ?N_ge80)  
+  BIND(157 AS ?N_total)
+}

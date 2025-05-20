@@ -1,0 +1,23 @@
+PREFIX he:     <http://healtheqkg.example.org/ontology#>
+PREFIX schema: <http://schema.org/>
+PREFIX xsd:    <http://www.w3.org/2001/XMLSchema#>
+
+SELECT ?zipStr ?score
+WHERE {
+  ?p a schema:Physician ;
+     schema:usNPI "1234567890" .               # ← replace with real NPI
+
+  ?jp a he:JobPlacement ;
+      he:hasParticipant ?p ;
+      he:worksAt          ?fac .
+
+  ?fac schema:address     ?addr .
+  ?addr schema:postalCode ?zipStr .
+
+  # find the ZIP resource by matching the string
+  ?zipRes he:zipCodeValue  ?zipStr ;
+          he:hasADISummary  ?adi .
+
+  ?adi he:nationalScore    ?score ;
+       he:referenceYear   "2020"^^xsd:gYear .
+}

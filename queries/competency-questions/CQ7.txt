@@ -1,0 +1,18 @@
+PREFIX he:     <http://healtheqkg.example.org/ontology#>
+PREFIX schema: <http://schema.org/>
+PREFIX xsd:    <http://www.w3.org/2001/XMLSchema#>
+
+SELECT ?zipStr ?score
+WHERE {
+  ?fac schema:name  ?name .
+  FILTER(CONTAINS(LCASE(STR(?name)), "FACILITY F"))   # ← match your facility’s name
+
+  ?fac schema:address     ?addr .
+  ?addr schema:postalCode ?zipStr .
+
+  ?zipRes he:zipCodeValue  ?zipStr ;
+          he:hasADISummary  ?adi .
+
+  ?adi he:nationalScore    ?score ;
+       he:referenceYear   "2020"^^xsd:gYear .
+}

@@ -1,0 +1,15 @@
+PREFIX schema: <http://schema.org/>
+PREFIX he:     <http://healtheqkg.example.org/ontology#>
+
+SELECT DISTINCT ?fac
+WHERE {
+  ?p a schema:Physician ;
+     schema:medicalSpecialty ?spec .
+  FILTER(CONTAINS(LCASE(STR(?spec)), "cardio"))
+
+  ?jp a he:JobPlacement ;
+      he:hasParticipant   ?p ;
+      he:worksAt          ?fac ;
+      he:hasTimeReference ?yr .
+  FILTER(STRAFTER(STR(?yr), "/year/") = "2020")
+}

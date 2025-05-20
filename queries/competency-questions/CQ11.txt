@@ -1,0 +1,22 @@
+PREFIX he:     <http://healtheqkg.example.org/ontology#>
+PREFIX schema: <http://schema.org/>
+
+SELECT DISTINCT ?spec
+WHERE {
+  ?p a schema:Physician ;
+     schema:medicalSpecialty ?spec .
+
+  ?jp a he:JobPlacement ;
+      he:hasParticipant ?p ;
+      he:worksAt       ?fac .
+
+  ?fac schema:address     ?addr .
+  ?addr schema:postalCode ?zipStr .
+
+  ?zipRes he:zipCodeValue  ?zipStr ;
+          he:hasADISummary  ?adi .
+
+  ?adi he:nationalScore    ?score .
+  FILTER(?score > 80)
+}
+ORDER BY ?spec

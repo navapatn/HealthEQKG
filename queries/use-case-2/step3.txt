@@ -1,0 +1,60 @@
+PREFIX he:   <http://healtheqkg.example.org/ontology#>
+PREFIX schema:<http://schema.org/>
+PREFIX xsd:  <http://www.w3.org/2001/XMLSchema#>
+
+SELECT ?avgHigh  ?avgLow
+WHERE {
+  # --- HighADI average ---
+  {
+    SELECT (AVG(xsd:integer(?grad)) AS ?avgHigh)
+    WHERE {
+      # Only physicians from top‐tier schools
+      VALUES ?school {
+        "Harvard Medical School"
+        "Johns Hopkins University School of Medicine"
+        "University of California San Francisco School of Medicine"
+        # …same list as Step 2…
+      }
+      ?ms a he:MedicalSchool ; rdfs:label ?school .
+      ?p  a schema:Physician ; he:attendedMedSchool ?ms ;
+          he:graduationYear     ?grad .
+      # 2020 placement in HighADI
+      ?jp a he:JobPlacement ; he:hasParticipant ?p ; he:worksAt ?fac ;
+          he:hasTimeReference ?yr .
+      FILTER(STRAFTER(STR(?yr), "/year/") = "2020")
+      ?fac schema:address    ?addr .
+      ?addr schema:postalCode ?zipStr .
+      ?zipArea a he:ZipCodeArea ; he:zipCodeValue ?zipStr ;
+               he:hasADISummary  ?adi .
+      ?adi he:nationalScore   ?score ;
+           he:referenceYear  "2020"^^xsd:gYear .
+      FILTER(?score >= 80)
+    }
+  }
+
+  # --- LowADI average ---
+  {
+    SELECT (AVG(xsd:integer(?grad)) AS ?avgLow)
+    WHERE {
+      VALUES ?school {
+        "Harvard Medical School"
+        "Johns Hopkins University School of Medicine"
+        "University of California San Francisco School of Medicine"
+      }
+      ?ms a he:MedicalSchool ; rdfs:label ?school .
+      ?p  a schema:Physician ; he:attendedMedSchool ?ms ;
+          he:graduationYear     ?grad .
+      # 2020 placement in LowADI
+      ?jp a he:JobPlacement ; he:hasParticipant ?p ; he:worksAt ?fac ;
+          he:hasTimeReference ?yr .
+      FILTER(STRAFTER(STR(?yr), "/year/") = "2020")
+      ?fac schema:address    ?addr .
+      ?addr schema:postalCode ?zipStr .
+      ?zipArea a he:ZipCodeArea ; he:zipCodeValue ?zipStr ;
+               he:hasADISummary  ?adi .
+      ?adi he:nationalScore   ?score ;
+           he:referenceYear  "2020"^^xsd:gYear .
+      FILTER(?score < 80)
+    }
+  }
+}

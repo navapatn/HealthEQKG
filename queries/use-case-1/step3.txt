@@ -1,0 +1,34 @@
+PREFIX schema: <http://schema.org/>
+PREFIX he:     <http://healtheqkg.example.org/ontology#>
+PREFIX xsd:    <http://www.w3.org/2001/XMLSchema#>
+
+SELECT (COUNT(DISTINCT ?fac) AS ?N_ge80)
+WHERE {
+  VALUES ?fac {
+    <http://healtheqkg.example.org/resource/facility/55905>
+<http://healtheqkg.example.org/resource/facility/27401>
+<http://healtheqkg.example.org/resource/facility/85259>
+<http://healtheqkg.example.org/resource/facility/92037>
+<http://healtheqkg.example.org/resource/facility/60942>
+<http://healtheqkg.example.org/resource/facility/80909>
+<http://healtheqkg.example.org/resource/facility/75035>
+<http://healtheqkg.example.org/resource/facility/32224>
+<http://healtheqkg.example.org/resource/facility/00926>
+<http://healtheqkg.example.org/resource/facility/06052>
+<http://healtheqkg.example.org/resource/facility/74136>
+<http://healtheqkg.example.org/resource/facility/45385>
+<http://healtheqkg.example.org/resource/facility/55435>
+<http://healtheqkg.example.org/resource/facility/19001>
+<http://healtheqkg.example.org/resource/facility/85306>
+<http://healtheqkg.example.org/resource/facility/18015>
+  }
+  ?fac schema:address      ?addr .
+  ?addr schema:postalCode  ?zipStr .
+  
+  ?zipRes a he:ZipCodeArea ;
+          he:zipCodeValue   ?zipStr ;
+          he:hasADISummary  ?adi .
+  
+  ?adi he:nationalScore     ?score .
+  FILTER(xsd:integer(?score) >= 80)
+}

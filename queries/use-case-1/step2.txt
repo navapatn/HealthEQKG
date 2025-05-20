@@ -1,0 +1,30 @@
+PREFIX schema: <http://schema.org/>
+PREFIX he:     <http://healtheqkg.example.org/ontology#>
+PREFIX xsd:    <http://www.w3.org/2001/XMLSchema#>
+
+SELECT ?fac ?score
+WHERE {
+  VALUES ?fac { 
+    <http://healtheqkg.example.org/resource/facility/85259>
+    <http://healtheqkg.example.org/resource/facility/55905>
+    <http://healtheqkg.example.org/resource/facility/98195>
+    <http://healtheqkg.example.org/resource/facility/98506>
+    <http://healtheqkg.example.org/resource/facility/20010>
+    <http://healtheqkg.example.org/resource/facility/32224>
+    <http://healtheqkg.example.org/resource/facility/60612>
+    <http://healtheqkg.example.org/resource/facility/45504>
+  }
+  
+  # 1. Get the postal code string from the PostalAddress
+  ?fac schema:address       ?addr .
+  ?addr schema:postalCode   ?zipStr .
+  
+  # 2. Find the ZipCodeArea node that has that literal zip value
+  ?zipRes a he:ZipCodeArea ;
+          he:zipCodeValue    ?zipStr ;
+          he:hasADISummary   ?adi .
+  
+  # 3. Finally get the 2020 national ADI score
+  ?adi he:nationalScore      ?score ;
+       he:referenceYear     "2020"^^xsd:gYear .
+}

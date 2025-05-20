@@ -1,0 +1,7 @@
+PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+
+SELECT (?avgHigh - ?avgLow AS ?Difference)
+WHERE {
+  BIND(2018  AS ?avgHigh)   # ← replace with your Step 3 result
+  BIND(2014  AS ?avgLow)    # ← replace with your Step 3 result
+}

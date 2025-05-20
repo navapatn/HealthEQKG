@@ -1,0 +1,49 @@
+PREFIX he:     <http://healtheqkg.example.org/ontology#>
+PREFIX schema: <http://schema.org/>
+PREFIX xsd:    <http://www.w3.org/2001/XMLSchema#>
+
+SELECT
+  ?N_total
+  ?N_ge80
+  ( xsd:decimal(?N_ge80) / xsd:decimal(?N_total) AS ?P )
+WHERE {
+  
+  # Step 1: count all distinct facilities with a 2020 cardiology placement
+  {
+    SELECT (COUNT(DISTINCT ?fac) AS ?N_total)
+    WHERE {
+      ?p a schema:Physician ;
+         schema:medicalSpecialty ?spec .
+      FILTER(CONTAINS(LCASE(STR(?spec)), "cardio"))
+      
+      ?jp a he:JobPlacement ;
+          he:hasParticipant   ?p ;
+          he:worksAt          ?fac ;
+          he:hasTimeReference ?yr .
+      FILTER(STRAFTER(STR(?yr), "/year/") = "2020")
+    }
+  }
+  
+  # Step 2+3: among those same facilities, count those whose ADI≥80
+  {
+    SELECT (COUNT(DISTINCT ?fac) AS ?N_ge80)
+    WHERE {
+      ?p a schema:Physician ;
+         schema:medicalSpecialty ?spec .
+      FILTER(CONTAINS(LCASE(STR(?spec)), "cardio"))
+      
+      ?jp a he:JobPlacement ;
+          he:hasParticipant ?p ;
+          he:worksAt        ?fac ;
+          he:hasTimeReference ?yr .
+      FILTER(STRAFTER(STR(?yr), "/year/") = "2020")
+      
+      # walk from facility → ZIP → ADI → score
+      ?fac he:locatedIn     ?zip ;
+           he:hasADISummary ?adi .
+      ?adi he:nationalScore ?score .
+      
+      FILTER(?score >= 80)
+    }
+  }
+}
