@@ -33,11 +33,6 @@ This repository provides:
 ## Prerequisites
 
 * **Python >= 3.8** with packages: `pandas`, `rdflib`, `rapidfuzz`, `tqdm`
-* **CSV data files** in the repository root:
-
-  * `medical_doctors_with_ADI.csv`
-  * `zipcode-adi.csv`
-  * `med-school-uri-attributes.csv`
 * **Local VM environment** or **Google Cloud account**
 * **Docker** installed on the VM
 
@@ -108,7 +103,6 @@ Use these prefixes in SPARQL queries against the graph.
 2. Name: `virtuoso-sparql`
    Machine: **e2‑micro**, Ubuntu 22.04 LTS, 10 GB disk
    Allow HTTP traffic
-3. Click **Create**
 
 ### Step 2: Launch browser‑SSH
 
