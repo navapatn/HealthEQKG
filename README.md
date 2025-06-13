@@ -7,14 +7,18 @@ HealthEQKG is a comprehensive knowledge graph linking *physicians*, *healthcare 
 * **Physician data** (NPI, specialty, graduation year, credentials)
 * **Facility data** (location, Medicare ID, descriptive metadata)
 * **Medical school** (including DBpedia abstract, faculty & student counts)
-* **ADI scores** per ZIP code 
+* **ADI scores** per ZIP code
 
-This repository provides:
+![Example ADI Map](ISWC-ADI-maps.png)
 
-1. **Data‑processing scripts** to generate Turtle (`.ttl`) and Gzip‑compressed (`.ttl.gz`) files from CSV sources, with full ontology declarations (.owl).
+This repository explains:
+
+1. **Data‑processing** to generate Turtle (`.ttl`) and Gzip‑compressed (`.ttl.gz`) files from CSV sources, with full ontology declarations (.owl).
 2. **Ontology extraction** script to produce a standalone OWL/RDF‑XML file.
 3. **Deployment instructions** for a Dockerized Virtuoso SPARQL endpoint on Google Cloud (free tier).
 4. **Guides** for updating the endpoint via the web UI or ISQL.
+
+![HealthEQKG Methodology](ISWC-method.png)
 
 ---
 
