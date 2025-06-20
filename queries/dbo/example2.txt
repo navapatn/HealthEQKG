@@ -1,0 +1,23 @@
+PREFIX he:     <http://healtheqkg.example.org/ontology#>
+PREFIX rdfs:   <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX schema: <http://schema.org/>
+PREFIX dbo:    <http://dbpedia.org/>
+
+SELECT DISTINCT
+  ?ms
+  ?schoolName
+  ?facultySize
+  ?numberOfStudents
+  ?abstract
+WHERE {
+  # 1) all MedicalSchool nodes
+  ?ms a he:MedicalSchool .
+
+  # 2) pull label, DBpedia & schema augmentations
+  OPTIONAL { ?ms rdfs:label            ?schoolName        }
+ OPTIONAL { ?ms dbo:facultySize       ?facultySize       }
+  OPTIONAL { ?ms dbo:numberOfStudents  ?numberOfStudents  }
+  OPTIONAL { ?ms dbo:abstract          ?abstract          }
+}
+ORDER BY ?schoolName
+LIMIT 100

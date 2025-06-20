@@ -1,0 +1,24 @@
+PREFIX schema: <http://schema.org/>
+PREFIX he: <http://healtheqkg.example.org/ontology#>
+PREFIX dbo: <http://dbpedia.org/>
+
+SELECT DISTINCT ?fac ?facName ?facAddress ?mecosGroup ?facNumb ?facDex ?facBeds ?facEmp
+WHERE {
+?p a schema:Physician ;
+schema:medicalSpecialty ?spec .
+FILTER(CONTAINS(LCASE(STR(?spec)), "cardio"))
+
+?jp a he:JobPlacement ;
+he:hasParticipant ?p ;
+he:worksAt ?fac ;
+he:hasTimeReference ?yr .
+FILTER(STRAFTER(STR(?yr), "/year/") = "2020")
+
+OPTIONAL { ?fac schema:name ?facName }
+OPTIONAL { ?fac schema:address ?facAddress }
+OPTIONAL { ?fac he:pecosGroupID ?mecosGroup }
+OPTIONAL { ?fac he:numberOfMembers ?facNumb }
+OPTIONAL { ?fac dbo:abstract ?facDex }
+OPTIONAL { ?fac dbo:numberOfBeds ?facBeds }
+OPTIONAL { ?fac dbo:numberOfEmployees ?facEmp }
+}
