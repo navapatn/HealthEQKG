@@ -49,7 +49,7 @@ This repository explains:
 Due to GitHub size constraints, the full raw datasets and preprocessing notebooks are archived on Zenodo (DOI: <ZENODO_DOI_LINK>). Download and unzip the resource bundle:
 
 ```bash
-wget -O HealthEQKG-resource.zip "https://zenodo.org/records/15708535/files/HealthEQKG-resource.zip?download=1"
+wget -O HealthEQKG-resource.zip "https://zenodo.org/records/15708535/"
 unzip HealthEQKG-resource.zip -d HealthEQKG-resource
 ```
 
