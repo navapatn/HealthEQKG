@@ -286,6 +286,37 @@ WHERE {
 
 ---
 
+## Natural Language Interface & Neo4j Visualization
+
+To demonstrate end-to-end capabilities using NL to Cypher pipeline, we provide notebooks for loading neo4j instance and perform agentic querying processes.
+
+![Neo4j Visualization](neo4j-visualization.png)
+
+
+1. **Load LLM & Prompt (01_load_llm_prompt.ipynb):**  
+   - Configure and authenticate OpenAI’s GPT-4o-mini.  
+   - Define few-shot prompts to map user questions to intended queries.
+
+2. **Query Neo4j (02_query_neo4j.ipynb):**  
+   - Connect to your Neo4j Aura Free instance.  
+   - Parse natural language questions through LangChain.  
+   - Generate Cypher queries dynamically.
+
+3. **Summarize Results (03_summarize_results.ipynb):**  
+   - Execute Cypher queries against Neo4j.  
+   - Aggregate and format results for human consumption.
+
+4. **End-to-End Pipeline (04_end_to_end_pipeline.ipynb):**  
+   - Combines all steps: LLM prompting → Cypher generation → query execution → result summarization.  
+   - Demonstrates a seamless chat-based interface.
+
+Future work includes integrating a web-based chatbot interface:
+
+![LangChain Chatbot Mockup](langchain.png)
+
+Feel free to explore these notebooks in `notebooks/` for detailed walkthroughs.
+
+---
 
 ## Reproducibility & Raw Data
 
