@@ -46,7 +46,7 @@ This repository explains:
 
 ### Download Raw Data from Zenodo
 
-Due to GitHub size constraints, the full raw datasets and preprocessing notebooks are archived on Zenodo (DOI: <ZENODO_DOI_LINK>). Download and unzip the resource bundle:
+Due to GitHub size constraints, the full raw datasets and preprocessing notebooks are archived on (DOI: [<Zenodo>](https://zenodo.org/records/15708535)). Download and unzip the resource bundle:
 
 ```bash
 wget -O HealthEQKG-resource.zip "https://zenodo.org/records/15708535/"
@@ -55,7 +55,7 @@ unzip HealthEQKG-resource.zip -d HealthEQKG-resource
 
 This archive includes:
 
-* `HealthEQKG-resource/raw-data/` — original CSVs and supporting files
+* `HealthEQKG-resource/resource-neo4j_import-v2.csv` — original CSVs and supporting files
 * `HealthEQKG-resource/notebooks/raw-data-rdf-neo4j/` containing two Jupyter notebooks:
   - **healtheqkg_rdf_upload.ipynb**: preprocess CSVs and build Turtle files
   - **neo4j_instance_connection_upload.ipynb**: load data into a Neo4j Aura Free instance
@@ -71,7 +71,7 @@ Use the **healtheqkg_rdf_upload.ipynb** notebook to generate your RDF:
    jupyter notebook HealthEQKG-resource/notebooks/raw-data-rdf-neo4j/healtheqkg_rdf_upload.ipynb
    ```
 2. In the notebook, run all cells. It will:
-   * Read and clean CSVs from `HealthEQKG-resource/raw-data/`
+   * Read and clean CSVs from `HealthEQKG-resource`
    * Normalize state names with `rdfs:label`
    * Perform fuzzy matching on medical school names against DBpedia
    * Expand ADI values for 2015–2020
