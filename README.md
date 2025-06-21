@@ -338,7 +338,7 @@ Total prompt costs: Input ≈ 2.04 M tokens ($2.24), Output ≈ 438 K toke
 The full HealthEQKG (∼198 k nodes, ∼319 k edges) runs on free-tier Google Cloud Virtuoso and Neo4j Aura without performance issues.
 
 ### Persistent Access and Maintenance
-A permanent archive is available on Zenodo (<ZENODO_DOI_LINK>). All URIs will be made dereferenceable via server-side configuration in future releases, ensuring stable access.
+A permanent archive is available on ([<Zenodo>](https://zenodo.org/records/15708535)). All URIs will be made dereferenceable via server-side configuration in future releases, ensuring stable access.
 
 ### SPARQL Access Tutorial
 An example SPARQL tutorial, including query samples and figures, is provided in the **queries/** folder and as a Jupyter notebook in **notebooks/**.
