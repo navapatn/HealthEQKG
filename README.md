@@ -289,7 +289,7 @@ WHERE {
 
 ## Reproducibility & Raw Data
 
-Due to GitHub size constraints, the full raw datasets and processing notebooks are archived on Zenodo: **[<ZENODO_DOI_LINK>](https://zenodo.org/records/15708535)**. This provides a persistent DOI and ensures all artifacts (CSV sources, Jupyter notebooks, scripts) are available for complete reproduction.  
+Due to GitHub size constraints, the full raw datasets and processing notebooks are archived on **[<Zenodo>](https://zenodo.org/records/15708535)**. This provides a persistent DOI and ensures all artifacts (CSV sources, Jupyter notebooks, scripts) are available for complete reproduction.  
 
 ---
 
