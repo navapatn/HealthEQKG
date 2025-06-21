@@ -44,19 +44,46 @@ This repository explains:
 
 ## Data Processing
 
-### 1. Build the full RDF graph
+### Download Raw Data from Zenodo
+
+Due to GitHub size constraints, the full raw datasets and preprocessing notebooks are archived on Zenodo (DOI: <ZENODO_DOI_LINK>). Download and unzip the resource bundle:
+
+```bash
+wget -O HealthEQKG-resource.zip "https://zenodo.org/records/15708535/files/HealthEQKG-resource.zip?download=1"
+unzip HealthEQKG-resource.zip -d HealthEQKG-resource
+```
+
+This archive includes:
+
+* `HealthEQKG-resource/raw-data/` — original CSVs and supporting files
+* `HealthEQKG-resource/notebooks/raw-data-rdf-neo4j/` containing two Jupyter notebooks:
+  - **healtheqkg_rdf_upload.ipynb**: preprocess CSVs and build Turtle files
+  - **neo4j_instance_connection_upload.ipynb**: load data into a Neo4j Aura Free instance
+
+---
+
+### 1. Build the Full RDF Graph
+
+Use the **healtheqkg_rdf_upload.ipynb** notebook to generate your RDF:
+
+1. Start Jupyter in the repository root:
+   ```bash
+   jupyter notebook HealthEQKG-resource/notebooks/raw-data-rdf-neo4j/healtheqkg_rdf_upload.ipynb
+   ```
+2. In the notebook, run all cells. It will:
+   * Read and clean CSVs from `HealthEQKG-resource/raw-data/`
+   * Normalize state names with `rdfs:label`
+   * Perform fuzzy matching on medical school names against DBpedia
+   * Expand ADI values for 2015–2020
+   * Output:
+     - `healtheqkg_full.ttl` (Turtle)
+     - `healtheqkg_full.ttl.gz` (compressed for bulk upload)
+
+Alternatively, you can run the builder script directly:
 
 ```bash
 python healtheqkg_builder_with_ontology.py
 ```
-
-This script:
-
-* Reads the three CSVs and expands ADI for years 2015–2020
-* Normalizes state codes → full names with `rdfs:label`
-* Performs fuzzy matching on medical school names
-* Generates `healtheqkg_full.ttl` (Turtle) with embedded ontology triples
-* Generates `healtheqkg_full.ttl.gz` (compressed) for bulk loading
 
 **Outputs:**
 
@@ -65,13 +92,34 @@ This script:
 
 ---
 
+### 2. Build Neo4j Graph Instances
+
+Use the **neo4j_instance_connection_upload.ipynb** notebook to load into Neo4j:
+
+1. Provision a Neo4j Aura Free instance and note the `bolt://` URI and auth token.
+2. Start Jupyter:
+   ```bash
+   jupyter notebook HealthEQKG-resource/notebooks/raw-data-rdf-neo4j/neo4j_instance_connection_upload.ipynb
+   ```
+3. In the first cell, enter your Neo4j connection details.
+4. Run all cells to:
+   * Preprocess the same CSVs from `HealthEQKG-resource/raw-data/`
+   * Create nodes and relationships for physicians, facilities, schools, zip areas, ADI scores, and job placements
+
+**Outputs:**
+
+* A populated Neo4j graph instance accessible via the Aura console
+* `healtheqkg_full.ttl` remains available for SPARQL endpoint loading
+
+---
+
 ## Ontology Extraction
 
-Extract a standalone OWL/RDF‑XML file for evaluation tools (Protégé, OOPS!):
+The ontology, which defines schemas for physicians, facilities, schools, ADI, and placements, was designed **before** the implementation.
 
-```bash
-python extract_ontology_from_full_graph.py
-```
+
+Extract a standalone OWL/RDF‑XML file for evaluation tools (Protégé, OOPS!): HealthEQKG-resource/notebooks/extract_ontology_from_graph.py
+
 
 Produces:
 
@@ -96,7 +144,9 @@ PREFIX rdf:    <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
 PREFIX rdfs:   <http://www.w3.org/2000/01/rdf-schema#>
 PREFIX owl:    <http://www.w3.org/2002/07/owl#>
 ```
+
 Use these prefixes in SPARQL queries against the graph.
+
 ---
 
 ## Deploying Virtuoso on Google Cloud
@@ -172,6 +222,35 @@ rdf_loader_run();
 checkpoint;
 quit;
 ```
+
+---
+
+## Reproducibility & Raw Data
+
+Due to GitHub size constraints, the full raw datasets and processing notebooks are archived on Zenodo: **<ZENODO_DOI_LINK>**. This provides a persistent DOI and ensures all artifacts (CSV sources, Jupyter notebooks, scripts) are available for complete reproduction.  
+
+The raw‐to‐RDF pipeline is documented and code released here: **<RAW_NOTEBOOKS_LINK>**.
+
+---
+
+## Configuration Details
+
+
+### DBpedia Spotlight
+We used DBpedia Spotlight with **confidence=0.8** and **support=20** for entity linking.
+
+### LLM Usage
+We utilized OpenAI’s **GPT-4o-mini** (no fine‑tuning) for fuzzy matching of place names. Few‑shot prompts included exemplar DBpedia names.  
+Total prompt costs: Input ≈ 2.04 M tokens ($2.24), Output ≈ 438 K tokens ($1.93), **Total ≈ $4.17**.
+
+### Scalability
+The full HealthEQKG (∼198 k nodes, ∼319 k edges) runs on free-tier Google Cloud Virtuoso and Neo4j Aura without performance issues.
+
+### Persistent Access and Maintenance
+A permanent archive is available on Zenodo (<ZENODO_DOI_LINK>). All URIs will be made dereferenceable via server-side configuration in future releases, ensuring stable access.
+
+### SPARQL Access Tutorial
+An example SPARQL tutorial, including query samples and figures, is provided in the **queries/** folder and as a Jupyter notebook in **notebooks/**.
 
 
 ---
