@@ -225,6 +225,68 @@ quit;
 
 ---
 
+## Querying the SPARQL Endpoint
+
+HealthEQKG provides a web‑based SPARQL query interface for exploring the data—no coding required.
+
+**Endpoint URL:**
+```
+http://healtheqkg.myftp.org/sparql
+```
+
+### 1. Access the Query UI
+1. Open your web browser and navigate to the endpoint URL above.
+2. You will see:
+   - A **Query** text box where you enter SPARQL queries.
+   - An **Execute** button to run your query.
+   - A **Results** pane below that displays returned rows.
+
+### 2. Declare Prefixes (Namespaces)
+At the top of each query, declare the vocabularies (namespaces) you will use. For example:
+```sparql
+PREFIX schema: <http://schema.org/>
+PREFIX he:     <http://healtheqkg.example.org/ontology#>
+```
+- **schema:** refers to Schema.org classes and properties (e.g., `schema:Physician`).
+- **he:** refers to HealthEQKG’s ontology (e.g., `he:JobPlacement`, `he:hasParticipant`).
+
+### 3. Example Query: Cardiology Facilities in 2020
+Paste the following into the Query box, then click **Execute**:
+```sparql
+PREFIX schema: <http://schema.org/>
+PREFIX he:     <http://healtheqkg.example.org/ontology#>
+
+SELECT DISTINCT ?fac
+WHERE {
+  # Find all Physicians whose specialty contains "cardio"
+  ?p a schema:Physician ;
+     schema:medicalSpecialty ?spec .
+  FILTER(CONTAINS(LCASE(STR(?spec)), "cardio"))
+
+  # Follow JobPlacement in 2020 to their Facility
+  ?jp a he:JobPlacement ;
+      he:hasParticipant   ?p ;
+      he:worksAt          ?fac ;
+      he:hasTimeReference ?yr .
+  FILTER(STRAFTER(STR(?yr), "/year/") = "2020")
+}
+```
+**What it does:**
+1. Uses the `schema:` and `he:` prefixes to reference classes and properties.
+2. Finds all physicians (`schema:Physician`) with specialties matching “cardio.”
+3. Traverses `he:JobPlacement` relationships in year 2020 to identify distinct facility nodes (`?fac`).
+
+### 4. Interpret the Results
+- The **Results** pane will list one column, `fac`, containing the IRIs of each facility.
+- You can click each IRI (if dereferenceable) or copy-paste it into subsequent queries.
+
+### 5. Next Steps
+- Modify the **SELECT** clause to return additional fields (e.g., facility name, address).
+- Explore other prefixes from the [RDF Namespaces](#rdf-namespaces) section.
+
+---
+
+
 ## Reproducibility & Raw Data
 
 Due to GitHub size constraints, the full raw datasets and processing notebooks are archived on Zenodo: **<ZENODO_DOI_LINK>**. This provides a persistent DOI and ensures all artifacts (CSV sources, Jupyter notebooks, scripts) are available for complete reproduction.  
