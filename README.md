@@ -96,7 +96,7 @@ python healtheqkg_builder_with_ontology.py
 
 Use the **neo4j_instance_connection_upload.ipynb** notebook to load into Neo4j:
 
-1. Provision a Neo4j Aura Free instance and note the `bolt://` URI and auth token.
+1. Provision a Neo4j Aura Free instance URI and auth token.
 2. Start Jupyter:
    ```bash
    jupyter notebook HealthEQKG-resource/notebooks/raw-data-rdf-neo4j/neo4j_instance_connection_upload.ipynb
